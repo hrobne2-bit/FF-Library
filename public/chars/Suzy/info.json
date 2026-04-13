@@ -1,0 +1,13 @@
+{
+  "id": "Suzy",
+  "name": "Suzy",
+  "skillName": "Money Mark",
+  "skillDescription": "Marked enemies have a bounty. Eliminating a marked enemy will grant 100 in-game currency to the user and 100 to the teammate who assisted.",
+  "lore": "Suzy is a shadow assassin who works for the highest bidder. She is always looking for ways to increase her wealth.",
+  "accentColor": "orange",
+  "gender": "Female",
+  "skillType": "Passive",
+  "age": 24,
+  "skillStyle": "Offense",
+  "releaseDate": "2023-09-01"
+}

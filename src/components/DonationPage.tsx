@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Heart, Smartphone } from 'lucide-react';
+import Logo from './Logo';
 
 export default function DonationPage() {
   const navigate = useNavigate();
@@ -36,13 +37,8 @@ export default function DonationPage() {
             <div className="space-y-6">
               <div className="bg-white/5 p-6 border border-white/10 rounded-2xl">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-[#E2136E] rounded-xl flex items-center justify-center text-white p-1.5">
-                    <img 
-                      src="https://picsum.photos/seed/bkash-logo/200/200" 
-                      alt="bKash" 
-                      className="w-full h-full object-contain"
-                      referrerPolicy="no-referrer"
-                    />
+                  <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white p-1.5 border border-white/10">
+                    <Logo variant="bkash" size={40} />
                   </div>
                   <div>
                     <h3 className="text-2xl font-gaming font-black uppercase tracking-tight">bKash Donation</h3>
@@ -52,12 +48,7 @@ export default function DonationPage() {
 
                 <div className="bg-black/40 p-8 rounded-2xl border border-white/5 flex flex-col items-center gap-6">
                   <div className="relative group">
-                    <img 
-                      src="https://picsum.photos/seed/bkash-qr/600/600" 
-                      alt="bKash QR Scanner" 
-                      className="w-56 h-56 object-contain bg-white p-3 rounded-2xl"
-                      referrerPolicy="no-referrer"
-                    />
+                    <Logo variant="qr" size={224} className="bg-white p-3 rounded-2xl" />
                     <div className="absolute -inset-3 bg-neon-yellow/10 blur-xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                   

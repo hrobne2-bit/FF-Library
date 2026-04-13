@@ -1,0 +1,13 @@
+{
+  "id": "Kassie",
+  "name": "Kassie",
+  "skillName": "Doctor Maniac",
+  "skillDescription": "Instantly restores 40 HP to a selected ally within 20m. Consumes 20 HP from the user. CD: 60s.",
+  "lore": "Kassie is a brilliant but eccentric doctor. She is willing to sacrifice anything to save her patients, even her own well-being.",
+  "accentColor": "orange",
+  "gender": "Female",
+  "skillType": "Active",
+  "age": 26,
+  "skillStyle": "Healing",
+  "releaseDate": "2024-02-01"
+}

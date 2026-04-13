@@ -2,9 +2,10 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Filter, ChevronDown } from 'lucide-react';
 import CharacterCard from './CharacterCard';
-import { characters } from '../data/characters';
+import { useCharacters } from '../hooks/useCharacters';
 
 export default function CharacterGrid() {
+  const { characters, loading: isInitialLoading } = useCharacters();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     gender: 'All',
@@ -17,22 +18,38 @@ export default function CharacterGrid() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const filteredCharacters = useMemo(() => {
-    return characters.filter(char => {
-      const matchesSearch = char.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          char.skillName.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesGender = filters.gender === 'All' || char.gender === filters.gender;
-      const matchesSkillType = filters.skillType === 'All' || char.skillType === filters.skillType;
-      const matchesSkillStyle = filters.skillStyle === 'All' || char.skillStyle === filters.skillStyle;
-      
-      let matchesAge = true;
-      if (filters.ageRange === 'Under 20') matchesAge = char.age < 20;
-      else if (filters.ageRange === '20-30') matchesAge = char.age >= 20 && char.age <= 30;
-      else if (filters.ageRange === 'Over 30') matchesAge = char.age > 30;
+    if (!characters || characters.length === 0) return [];
+    
+    return characters
+      .filter(char => {
+        // Ensure properties exist before filtering
+        const name = char.name || '';
+        const skillName = char.skillName || '';
+        const gender = char.gender || '';
+        const skillType = char.skillType || '';
+        const skillStyle = char.skillStyle || '';
+        const age = char.age || 0;
 
-      return matchesSearch && matchesGender && matchesSkillType && matchesSkillStyle && matchesAge;
-    });
-  }, [searchQuery, filters]);
+        const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            skillName.toLowerCase().includes(searchQuery.toLowerCase());
+        
+        const matchesGender = filters.gender === 'All' || gender === filters.gender;
+        const matchesSkillType = filters.skillType === 'All' || skillType === filters.skillType;
+        const matchesSkillStyle = filters.skillStyle === 'All' || skillStyle === filters.skillStyle;
+        
+        let matchesAge = true;
+        if (filters.ageRange === 'Under 20') matchesAge = age < 20;
+        else if (filters.ageRange === '20-30') matchesAge = age >= 20 && age <= 30;
+        else if (filters.ageRange === 'Over 30') matchesAge = age > 30;
+
+        return matchesSearch && matchesGender && matchesSkillType && matchesSkillStyle && matchesAge;
+      })
+      .sort((a, b) => {
+        const dateA = a.releaseDate ? new Date(a.releaseDate).getTime() : 0;
+        const dateB = b.releaseDate ? new Date(b.releaseDate).getTime() : 0;
+        return dateB - dateA;
+      });
+  }, [searchQuery, filters, characters]);
 
   const loadMore = () => {
     if (visibleCount >= filteredCharacters.length) return;
@@ -55,6 +72,19 @@ export default function CharacterGrid() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isLoading, visibleCount, filteredCharacters.length]);
 
+  // Reset visible count when characters change or filters change
+  useEffect(() => {
+    setVisibleCount(8);
+  }, [characters.length, searchQuery, filters]);
+
+  if (isInitialLoading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="transformer-block"></div>
+      </div>
+    );
+  }
+
   return (
     <section className="py-8">
       {/* Search & Filter Bar */}
@@ -70,7 +100,7 @@ export default function CharacterGrid() {
               placeholder="Search characters or skills..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-full py-3 pl-12 pr-6 text-base font-medium focus:outline-none focus:ring-4 focus:ring-neon-yellow/10 focus:border-neon-yellow/50 transition-all placeholder:text-white/10"
+              className="w-full bg-white/5 border border-white/10 rounded-full py-3 pl-12 pr-6 text-base font-medium focus:outline-none focus:ring-4 focus:ring-neon-yellow/10 focus:border-neon-yellow/50 transition-all placeholder:text-white/10 cyber-shadow-sm"
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery('')} className="absolute inset-y-0 right-4 flex items-center text-white/20 hover:text-white">
@@ -97,7 +127,7 @@ export default function CharacterGrid() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 bg-white/5 border border-white/10 rounded-2xl"
+              className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 bg-white/5 border border-white/10 rounded-2xl cyber-shadow"
             >
               <FilterGroup 
                 label="Gender" 
@@ -144,12 +174,8 @@ export default function CharacterGrid() {
       )}
 
       {isLoading && (
-        <div className="mt-12 flex justify-center">
-          <motion.div 
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-10 h-10 border-4 border-neon-yellow/10 border-t-neon-yellow rounded-full"
-          />
+        <div className="mt-12 loader-container">
+          <div className="transformer-block"></div>
         </div>
       )}
     </section>

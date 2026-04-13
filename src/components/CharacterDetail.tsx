@@ -1,12 +1,25 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { characters } from '../data/characters';
+import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useCharacters } from '../hooks/useCharacters';
 import { ArrowLeft, Download, Shield, Zap, Info } from 'lucide-react';
+import Logo from './Logo';
 
 export default function CharacterDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const character = characters.find(c => c.id === id);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { characters, loading: isInitialLoading } = useCharacters();
+  
+  const character = useMemo(() => characters.find(c => c.id === id), [characters, id]);
+
+  if (isInitialLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gaming-dark">
+        <div className="transformer-block"></div>
+      </div>
+    );
+  }
 
   if (!character) {
     return (
@@ -28,13 +41,26 @@ export default function CharacterDetail() {
     >
       {/* Hero Section with Background Image */}
       <div className="relative h-[65vh] w-full overflow-hidden border-b-4 border-neon-yellow">
+        {/* Loader Overlay */}
+        <AnimatePresence>
+          {!isLoaded && (
+            <motion.div 
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-20 bg-black flex items-center justify-center"
+            >
+              <div className="transformer-block"></div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <motion.img 
           initial={{ scale: 1.1, filter: 'grayscale(100%)' }}
           animate={{ scale: 1, filter: 'grayscale(0%)' }}
           transition={{ duration: 1.5, ease: "easeOut" }}
           src={character.assets.wallpaperUrl} 
           alt={character.name}
-          className="w-full h-full object-cover opacity-60"
+          onLoad={() => setIsLoaded(true)}
+          className={`w-full h-full object-cover transition-opacity duration-1000 ${isLoaded ? 'opacity-60' : 'opacity-0'}`}
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gaming-dark via-transparent to-transparent" />
@@ -52,14 +78,17 @@ export default function CharacterDetail() {
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="flex flex-col gap-1 border-l-4 border-neon-yellow pl-6">
-              <motion.span 
+              <motion.div 
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-[10px] font-black uppercase tracking-[0.5em] text-neon-yellow"
+                className="flex items-center gap-2"
               >
-                Legendary Character
-              </motion.span>
+                <Logo variant="transparent" size={12} className="opacity-60" />
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-neon-yellow">
+                  Legendary Character
+                </span>
+              </motion.div>
               <motion.h1 
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}

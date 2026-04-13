@@ -1,0 +1,13 @@
+{
+  "id": "Ryden",
+  "name": "Ryden",
+  "skillName": "Spider Trap",
+  "skillDescription": "Releases a robotic spider that travels in a straight line for 10s. The spider will pounce on the first enemy it encounters within 5m, reducing their movement speed by 80% and dealing 10 damage/s for 3s.",
+  "lore": "Ryden is a 16-year-old inventive genius. He loves tinkering with gadgets and has created a robotic spider to help him in battle.",
+  "accentColor": "orange",
+  "gender": "Male",
+  "skillType": "Active",
+  "age": 16,
+  "skillStyle": "Information",
+  "releaseDate": "2023-12-01"
+}

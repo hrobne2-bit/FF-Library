@@ -1,4 +1,5 @@
-import { motion } from 'motion/react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { Character } from '../types';
 
@@ -10,6 +11,7 @@ interface CharacterCardProps {
 
 export default function CharacterCard({ character, index }: CharacterCardProps) {
   const navigate = useNavigate();
+  const [isLoaded, setIsLoaded] = useState(false);
   
   return (
     <motion.div
@@ -26,15 +28,28 @@ export default function CharacterCard({ character, index }: CharacterCardProps) 
       className="group relative flex flex-col cursor-pointer mt-8"
     >
       {/* The Card Body with Chamfered Corner */}
-      <div className="relative w-full aspect-[3/4.5] cyber-card-shape bg-white/5 border border-neon-yellow/30 group-hover:border-neon-yellow transition-all duration-300 overflow-hidden">
+      <div className="relative w-full aspect-[3/4.5] cyber-card-shape bg-white/5 border border-neon-yellow/30 group-hover:border-neon-yellow transition-all duration-300 overflow-hidden cyber-shadow group-hover:cyber-glow">
         
+        {/* Loader Overlay */}
+        <AnimatePresence>
+          {!isLoaded && (
+            <motion.div 
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-20 bg-black flex items-center justify-center scale-50"
+            >
+              <div className="transformer-block"></div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Character Image - Large and slightly popping */}
         <div className="absolute inset-0 top-[-10%] h-[110%] w-full">
           <motion.img
             src={character.imageUrl}
             alt={character.name}
             referrerPolicy="no-referrer"
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+            onLoad={() => setIsLoaded(true)}
+            className={`w-full h-full object-cover transition-all duration-700 ${isLoaded ? 'grayscale group-hover:grayscale-0 opacity-100' : 'opacity-0'}`}
             whileHover={{ scale: 1.05 }}
           />
         </div>

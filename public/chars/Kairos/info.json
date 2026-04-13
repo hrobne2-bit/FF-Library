@@ -1,0 +1,13 @@
+{
+  "id": "Kairos",
+  "name": "Kairos",
+  "skillName": "Dual Guardian",
+  "skillDescription": "Switches between Defense Mode (reduces damage taken by 20%) and Offense Mode (increases armor penetration by 20%). Switching has a 10s cooldown.",
+  "lore": "Kairos is a warrior who has mastered the balance between light and dark. He can adapt to any situation on the battlefield.",
+  "accentColor": "cyan",
+  "gender": "Male",
+  "skillType": "Active",
+  "age": 25,
+  "skillStyle": "Defense",
+  "releaseDate": "2024-01-01"
+}

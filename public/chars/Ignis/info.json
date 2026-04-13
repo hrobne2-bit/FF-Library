@@ -1,0 +1,13 @@
+{
+  "id": "Ignis",
+  "name": "Ignis",
+  "skillName": "Flame Barrier",
+  "skillDescription": "Deploys a flaming screen that is 10m wide and lasts for 8s. Enemies who touch the screen will take 30 DMG and receive a burning effect, which deals 10 DMG/s and reduces armor durability for 2s.",
+  "lore": "Ignis is a man who has a deep connection with fire. He can control the flames, using them to protect his allies and destroy his enemies.",
+  "accentColor": "cyan",
+  "gender": "Male",
+  "skillType": "Active",
+  "age": 22,
+  "skillStyle": "Defense",
+  "releaseDate": "2023-11-01"
+}
